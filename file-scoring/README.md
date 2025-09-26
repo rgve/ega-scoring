@@ -5,6 +5,19 @@ The workflow: **load → merge → summarize (robust) → score → export → (
 
 > This repository contains an R script that ingests a metrics table and a mapping from EGAF IDs to library strategies, computes robust strategy-specific thresholds, and assigns per-file QC scores without categorical labels.
 
+## Abstract
+
+Quality control (QC) of next-generation sequencing (NGS) datasets is critical for evaluating experimental success, ensuring the reliability of downstream analyses, and facilitating data reuse. Existing tools such as FastQC, SAMtools, and Picard generate a multitude of QC metrics, which, while valuable, can be difficult for non-experts to interpret.
+
+The European Genome-Phenome Archive (EGA) hosts millions of sequencing files submitted by diverse research groups using a wide range of library preparation strategies and protocols. Although EGA provides QC reports per file, it remains challenging for data requesters to assess dataset quality prior to initiating the often lengthy data access process. Moreover, considerable variation in expected outputs across library types—such as differences in GC content between whole-exome and bisulfite sequencing—precludes the use of universal quality thresholds. These challenges underscore the need for a simplified yet library-aware quality scoring system.
+
+Here, we leverage the diversity of files deposited at EGA—spanning numerous protocols and twenty distinct library strategies—to develop tailored quality scores based on the median values of several key QC metrics. For FASTQ files, we include the read duplication rate, read quality, and GC content. For aligned files (BAM/CRAM), we additionally incorporate mapping quality (MAPQ) and the ratio of unaligned reads. Files are penalized based on their deviation from the library-specific median using a modified z-score derived from the median absolute deviation (MAD) for GC content, duplication rate, and unalignment rate. Furthermore, we apply additional penalties when the proportion of reads with a quality score or MAPQ ≥30 falls below 80%. An aggregate  penalty score is then calculated for each file.
+
+Applying this scoring system to millions of FASTQ and BAM/CRAM files, we observe clear divergence in QC metrics across library strategies. When we compare penalty scores of datasets revoked by ENCODE against those that were approved, the revoked datasets consistently showed higher penalty scores, supporting the validity of our approach.
+
+Future work will include incorporating additional QC metrics, quantifying correlations between QC metrics to avoid redundant penalization for related sources of error, refining the weights of individual metrics in the aggregated score, and computing quality scores at the dataset level (rather than per file).
+
+
 ## Features
 
 - **Library-strategy aware** thresholds and scoring
