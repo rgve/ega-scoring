@@ -1,4 +1,4 @@
-# Strategy-Aware Continuous QC Scoring
+# A Universal, library‐aware Quality Score for NGS Files
 
 A fast, **data.table**-based pipeline to compute a **continuous QC score** per sequencing file, **tailored to library strategy**.  
 The workflow: **load → merge → summarize (robust) → score → export → (optional) plot**.
